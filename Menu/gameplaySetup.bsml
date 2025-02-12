@@ -1,0 +1,11 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+    xsi:noNamespaceSchemaLocation='https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+
+    <modifier-container>
+        <modifier value='ModifierEnabled'
+                  text='Saber Randomizer'
+                  src='SaberRandomizer.Resources.modifier-saber-randomizer.png'
+                  apply-on-change='true'/> 
+    </modifier-container>
+    
+</bg>
