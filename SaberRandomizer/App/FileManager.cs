@@ -9,12 +9,15 @@ namespace SaberRandomizer.App;
 
 internal class FileManager : IInitializable, ISaberFileRandomizer
 {
+    private readonly SiraLog logger;
     private readonly Random random;
+    
     private readonly DirectoryInfo customSabersDirectory = new(Path.Combine(UnityGame.InstallPath, "CustomSabers"));
     private readonly string[] supportedFileTypes = ["saber"];
 
     public FileManager(SiraLog logger, Random random)
     {
+        this.logger = logger;
         this.random = random;
     }
     
@@ -29,8 +32,17 @@ internal class FileManager : IInitializable, ISaberFileRandomizer
     
     public FileInfo? GetRandomSaberFile()
     {
-        var saberFile = saberFiles.Any() ? saberFiles[random.Next(saberFiles.Length - 1)] : null;
-        saberFile?.Refresh();
+        if (saberFiles is [])
+        {
+            logger.Debug("Couldn't get random saber; there are no saber files.");
+            return null;
+        }
+        
+        var saberIndex = random.Next(saberFiles.Length);
+        var saberFile = saberFiles[saberIndex];
+        
+        saberFile.Refresh();
+        logger.Debug($"Got saber file at index {saberIndex}: {saberFile.Name}");
 
         return saberFile;
     }

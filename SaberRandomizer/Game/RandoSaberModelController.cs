@@ -46,6 +46,8 @@ internal class RandoSaberModelController : SaberModelController, IPreSaberModelI
         saberInstance = saberSet.SaberForType(saberType);
         saberInstance.SetLayerRecursively(12);
         saberInstance.transform.SetParent(transform, false);
+        saberInstance.transform.position = transform.position;
+        saberInstance.transform.rotation = transform.rotation;
 
         var trailData = saberSet.TrailForType(saberType);
         var trailIntensity = gameplayCoreSceneSetupData.playerSpecificSettings.saberTrailIntensity;
