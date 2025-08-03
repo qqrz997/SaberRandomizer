@@ -14,13 +14,8 @@ internal class AppInstaller : Installer
     
     public override void InstallBindings()
     {
-        Container.BindInterfacesAndSelfTo<GameResourcesProvider>().AsSingle();
-        Container.BindInterfacesAndSelfTo<SaberPrefabCache>().AsSingle();
-        Container.BindInterfacesAndSelfTo<FileManager>().AsSingle();
         Container.BindInstance(pluginConfig).AsSingle();
-        Container.Bind<CustomSaberLoader>().AsSingle();
-        Container.Bind<TrailFactory>().AsSingle();
-        Container.Bind<SaberFactory>().AsSingle();
+        Container.Bind<RandomSaberFactory>().AsSingle();
     }
 }
 

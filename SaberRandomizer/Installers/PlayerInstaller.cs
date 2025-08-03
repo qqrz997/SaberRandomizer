@@ -7,14 +7,14 @@ namespace SaberRandomizer.Installers;
 
 internal class PlayerInstaller : Installer
 {
-    private readonly SaberFactory saberFactory;
+    private readonly RandomSaberFactory randomSaberFactory;
     private readonly PluginConfig pluginConfig;
     
     public PlayerInstaller(
-        SaberFactory saberFactory,
+        RandomSaberFactory randomSaberFactory,
         PluginConfig pluginConfig)
     {
-        this.saberFactory = saberFactory;
+        this.randomSaberFactory = randomSaberFactory;
         this.pluginConfig = pluginConfig;
     }
     
@@ -22,8 +22,7 @@ internal class PlayerInstaller : Installer
     {
         if (!pluginConfig.ModifierEnabled) return;
         
-        Container.BindInterfacesAndSelfTo<SaberEventService>().AsTransient();
-        Container.BindInstance(saberFactory.CreateCurrentSabers()).AsSingle();
+        Container.BindInstance(randomSaberFactory.CreateRandomSaber()).AsSingle();
         
         // This replaces the default sabers
         Container.BindInstance(SaberModelRegistration.Create<RandoSaberModelController>(int.MaxValue));

@@ -21,7 +21,7 @@
     <DependsOn Include="BSIPA" Version="^4.3.5"/>
     <DependsOn Include="BeatSaberMarkupLanguage" Version="^1.12.5"/>
     <DependsOn Include="SiraUtil" Version="^3.1.14"/>
-    <DependsOn Include="AssetBundleLoadingTools" Version="^1.1.9"/>
+    <DependsOn Include="SabersCore" Version="^1.0.0"/>
   </ItemGroup>
   
   <PropertyGroup>
