@@ -10,7 +10,7 @@ namespace SaberRandomizer.Game;
 
 internal class RandoSaberModelController : SaberModelController, IColorable, IPreSaberModelInit
 {
-    [Inject] private readonly Task<SaberInstanceSet> saberSet = null!;
+    [Inject] private readonly GameplaySaberProvider gameplaySaberProvider = null!;
     [Inject] private readonly ITrailFactory trailFactory = null!;
     [Inject] private readonly ICustomSaberEventManagerHandler eventManagerHandler = null!;
     [Inject] private readonly ColorManager colorManager = null!;
@@ -38,7 +38,7 @@ internal class RandoSaberModelController : SaberModelController, IColorable, IPr
 
     private async void CustomSaberInit(Saber saber)
     {
-        var sabers = await saberSet;
+        var sabers = await gameplaySaberProvider.GetSabers();
         saberInstance = sabers.GetSaberForType(saber.saberType);
         
         if (saberInstance is null)

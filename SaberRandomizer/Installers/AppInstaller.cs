@@ -1,4 +1,4 @@
-using SaberRandomizer.App;
+using SaberRandomizer.Game;
 using Zenject;
 
 namespace SaberRandomizer.Installers;
@@ -15,7 +15,6 @@ internal class AppInstaller : Installer
     public override void InstallBindings()
     {
         Container.BindInstance(pluginConfig).AsSingle();
-        Container.Bind<RandomSaberFactory>().AsSingle();
     }
 }
 

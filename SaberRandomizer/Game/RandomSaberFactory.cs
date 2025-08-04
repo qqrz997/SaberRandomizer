@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SabersCore.Models;
 using SabersCore.Services;
 
-namespace SaberRandomizer.App;
+namespace SaberRandomizer.Game;
 
 internal class RandomSaberFactory
 {
