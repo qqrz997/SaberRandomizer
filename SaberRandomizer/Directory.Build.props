@@ -7,8 +7,8 @@
     <PluginId>SaberRandomizer</PluginId>
     <PluginName>SaberRandomizer</PluginName>
     <Authors>qqrz997</Authors>
-    <Version>1.0.1</Version>
-    <GameVersion>1.40.0</GameVersion>
+    <Version>1.0.2</Version>
+    <GameVersion>1.42.0</GameVersion>
     <Description>Picks one of your custom sabers at random every time you play.</Description>
     <!--<PluginIcon></PluginIcon>-->
     <!--<ProjectSource></ProjectSource>-->

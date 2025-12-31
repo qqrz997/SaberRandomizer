@@ -8,16 +8,14 @@ namespace SaberRandomizer.Game;
 
 internal class RandomSaberFactory
 {
-    private readonly Random random;
     private readonly ISaberFileManager saberFileManager;
     private readonly ISaberInstanceFactory saberInstanceFactory;
+    private readonly Random random = new();
     
     public RandomSaberFactory(
-        Random random,
         ISaberFileManager saberFileManager, 
         ISaberInstanceFactory saberInstanceFactory)
     {
-        this.random = random;
         this.saberFileManager = saberFileManager;
         this.saberInstanceFactory = saberInstanceFactory;
     }
