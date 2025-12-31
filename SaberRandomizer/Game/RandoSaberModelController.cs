@@ -1,29 +1,23 @@
 using System.Threading.Tasks;
-using CustomSaber;
-using IPA.Utilities.Async;
-using SaberRandomizer.App;
-using SaberRandomizer.Models;
-using SaberRandomizer.Utilities;
+using SabersCore.Components;
+using SabersCore.Models;
+using SabersCore.Services;
 using SiraUtil.Interfaces;
 using UnityEngine;
 using Zenject;
-using static SaberRandomizer.Utilities.CustomSaberUtils;
 
 namespace SaberRandomizer.Game;
 
-internal class RandoSaberModelController : SaberModelController, IPreSaberModelInit, IColorable
+internal class RandoSaberModelController : SaberModelController, IColorable, IPreSaberModelInit
 {
-    [Inject] private readonly SaberEventService saberEventService = null!;
-    [Inject] private readonly TrailFactory trailFactory = null!;
-    [Inject] private readonly Task<SaberInstanceSet> saberInstanceSet = null!;
-    [Inject] private readonly GameplayCoreSceneSetupData gameplayCoreSceneSetupData = null!;
+    [Inject] private readonly GameplaySaberProvider gameplaySaberProvider = null!;
+    [Inject] private readonly ITrailFactory trailFactory = null!;
+    [Inject] private readonly ICustomSaberEventManagerHandler eventManagerHandler = null!;
     [Inject] private readonly ColorManager colorManager = null!;
-
-    private DefaultSaberColorer? defaultSaberColorer;
+    [Inject] private readonly GameplayCoreSceneSetupData gameplayCoreSceneSetupData = null!;
     
-    private GameObject? saberInstance;
-    private Material[] colorableMaterials = [];
-    private RandoSaberTrail[] customTrailInstances = [];
+    private ISaber? saberInstance;
+    private CustomSaberTrail[] customTrailInstances = [];
     private Color color;
 
     public Color Color
@@ -31,63 +25,46 @@ internal class RandoSaberModelController : SaberModelController, IPreSaberModelI
         get => color;
         set => SetColor(value);
     }
-    
+
     public bool PreInit(Transform parent, Saber saber)
     {
         transform.SetParent(parent, false);
-        UnityMainThreadTaskScheduler.Factory.StartNew(() => Init(saber.saberType));
+        transform.position = parent.position;
+        transform.rotation = parent.rotation;
+        
+        CustomSaberInit(saber);
         return false;
     }
 
-    private async Task Init(SaberType saberType)
+    private async void CustomSaberInit(Saber saber)
     {
-        var saberSet = await saberInstanceSet;
+        var sabers = await gameplaySaberProvider.GetSabers();
+        saberInstance = sabers.GetSaberForType(saber.saberType);
         
-        saberInstance = saberSet.SaberForType(saberType);
-        saberInstance.SetLayerRecursively(12);
-        saberInstance.transform.SetParent(transform, false);
-        saberInstance.transform.position = transform.position;
-        saberInstance.transform.rotation = transform.rotation;
+        if (saberInstance is null)
+        {
+            return;
+        }
 
-        var trailData = saberSet.TrailForType(saberType);
-        var trailIntensity = gameplayCoreSceneSetupData.playerSpecificSettings.saberTrailIntensity;
-        customTrailInstances = trailFactory.AddTrailsTo(saberInstance, trailData, trailIntensity);
+        saberInstance.SetParent(transform);
         
-        var eventManager = saberInstance.GetComponentOrAdd<EventManager>();
-        saberEventService.InitializeEventManager(eventManager, saberType);
-        
-        colorableMaterials = GetColorableSaberMaterials(saberInstance);
+        eventManagerHandler.InitializeEventManager(saberInstance.GameObject, saber.saberType);
 
-        defaultSaberColorer = saberInstance.GetComponentInChildren<DefaultSaberColorer>();
+        customTrailInstances = trailFactory.AddTrailsTo(
+            saberInstance,
+            sabers.GetTrailsForType(saber.saberType),
+            gameplayCoreSceneSetupData.playerSpecificSettings.saberTrailIntensity);
         
-        SetColor(colorManager.ColorForSaberType(saberType));
+        SetColor(colorManager.ColorForSaberType(saber.saberType));
     }
 
-    private void SetColor(Color color)
+    public void SetColor(Color color)
     {
         this.color = color;
-        
+        saberInstance?.SetColor(color);
         foreach (var trail in customTrailInstances)
         {
-            trail.SetColor(color with { a = gameplayCoreSceneSetupData.playerSpecificSettings.saberTrailIntensity });
-        }
-
-        foreach (var material in colorableMaterials)
-        {
-            material.SetColor(MaterialProperties.Color, color);
-        }
-
-        if (defaultSaberColorer != null)
-        {
-            defaultSaberColorer.SetColor(color);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (saberInstance != null)
-        {
-            Destroy(saberInstance);
+            trail.SetColor(color);
         }
     }
 }

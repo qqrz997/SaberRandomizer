@@ -7,8 +7,8 @@
     <PluginId>SaberRandomizer</PluginId>
     <PluginName>SaberRandomizer</PluginName>
     <Authors>qqrz997</Authors>
-    <Version>1.0.1</Version>
-    <GameVersion>1.40.0</GameVersion>
+    <Version>1.0.2</Version>
+    <GameVersion>1.42.0</GameVersion>
     <Description>Picks one of your custom sabers at random every time you play.</Description>
     <!--<PluginIcon></PluginIcon>-->
     <!--<ProjectSource></ProjectSource>-->
@@ -21,7 +21,7 @@
     <DependsOn Include="BSIPA" Version="^4.3.5"/>
     <DependsOn Include="BeatSaberMarkupLanguage" Version="^1.12.5"/>
     <DependsOn Include="SiraUtil" Version="^3.1.14"/>
-    <DependsOn Include="AssetBundleLoadingTools" Version="^1.1.9"/>
+    <DependsOn Include="SabersCore" Version="^1.0.0"/>
   </ItemGroup>
   
   <PropertyGroup>
